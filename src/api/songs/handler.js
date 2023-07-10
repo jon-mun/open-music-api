@@ -1,3 +1,6 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-unused-vars */
+/* eslint-disable object-curly-newline */
 class SongsHandler {
   #service;
 
@@ -8,6 +11,85 @@ class SongsHandler {
     this.validator = validator;
 
     // bind
+    this.postSongHandler = this.postSongHandler.bind(this);
+    this.getSongsHandler = this.getSongsHandler.bind(this);
+    this.getSongByIdHandler = this.getSongByIdHandler.bind(this);
+    this.putSongByIdHandler = this.putSongByIdHandler.bind(this);
+    this.deleteSongByIdHandler = this.deleteSongByIdHandler.bind(this);
+  }
+
+  async postSongHandler(request, h) {
+    this.validator.validateSongPayload(request.payload);
+    const { title, year, performer, genre, duration } = request.payload;
+    const songId = await this.service.addSong({
+      title,
+      year,
+      performer,
+      genre,
+      duration,
+    });
+
+    const response = h.response({
+      status: 'success',
+      message: 'Lagu berhasil ditambahkan',
+      data: {
+        songId,
+      },
+    });
+
+    response.code(201);
+    return response;
+  }
+
+  async getSongsHandler() {
+    const songs = await this.service.getSongs();
+    return {
+      status: 'success',
+      data: {
+        songs,
+      },
+    };
+  }
+
+  async getSongByIdHandler(request, _h) {
+    const { id } = request.params;
+    const song = await this.service.getSongById(id);
+
+    return {
+      status: 'success',
+      data: {
+        song,
+      },
+    };
+  }
+
+  async putSongByIdHandler(request, _h) {
+    const { id } = request.params;
+    this.validator.validateSongPayload(request.payload);
+    const { title, year, performer, genre, duration, albumId } =
+      request.payload;
+    await this.service.editSongById(id, {
+      title,
+      year,
+      performer,
+      genre,
+      duration,
+      albumId,
+    });
+
+    return {
+      status: 'success',
+      message: 'Lagu berhasil diperbarui',
+    };
+  }
+
+  async deleteSongByIdHandler(request, _h) {
+    const { id } = request.params;
+    await this.service.deleteSongById(id);
+    return {
+      status: 'success',
+      message: 'Lagu berhasil dihapus',
+    };
   }
 }
 
