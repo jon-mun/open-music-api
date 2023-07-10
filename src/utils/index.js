@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 /* eslint-disable camelcase */
 
 const mapAlbumDBToModel = ({ id, name, year }) => ({

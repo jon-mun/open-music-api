@@ -1,6 +1,4 @@
-/* eslint-disable operator-linebreak */
 /* eslint-disable no-unused-vars */
-/* eslint-disable object-curly-newline */
 class SongsHandler {
   #service;
 

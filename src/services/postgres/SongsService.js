@@ -1,5 +1,3 @@
-/* eslint-disable comma-dangle */
-/* eslint-disable object-curly-newline */
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
 const NotFoundError = require('../../exceptions/NotFoundError');
