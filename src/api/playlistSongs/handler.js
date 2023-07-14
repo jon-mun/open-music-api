@@ -27,7 +27,7 @@ class PlaylistSongsHandler {
 
     await this.songsService.verifySongById(songId);
     await this.playlistsService.verifyPlaylistAccess(playlistId, credentialId);
-    await this.service.addSongToPlaylist(playlistId, songId);
+    await this.service.addSongToPlaylist(playlistId, songId, credentialId);
 
     const response = h.response({
       status: 'success',
@@ -71,7 +71,7 @@ class PlaylistSongsHandler {
     await this.playlistsService.verifyPlaylistAccess(playlistId, credentialId);
 
     await this.service.verifySongInPlaylist(playlistId, songId);
-    await this.service.deleteSongFromPlaylist(playlistId, songId);
+    await this.service.deleteSongFromPlaylist(playlistId, songId, credentialId);
 
     return {
       status: 'success',

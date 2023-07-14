@@ -5,11 +5,14 @@ const NotFoundError = require('../../exceptions/NotFoundError');
 class PlaylistSongsService {
   #pool;
 
-  constructor() {
+  #playlistSongActivitiesService;
+
+  constructor(playlistSongActivitiesService) {
     this.pool = new Pool();
+    this.playlistSongActivitiesService = playlistSongActivitiesService;
   }
 
-  async addSongToPlaylist(playlistId, songId) {
+  async addSongToPlaylist(playlistId, songId, userId) {
     const id = `playlistsong-${nanoid(16)}`;
 
     const query = {
@@ -22,6 +25,14 @@ class PlaylistSongsService {
     if (!result.rows[0].id) {
       throw new Error('Lagu gagal ditambahkan ke playlist');
     }
+
+    await this.playlistSongActivitiesService.addActivityToPlaylist(
+      playlistId,
+      songId,
+      userId,
+      'add',
+      new Date().toISOString(),
+    );
 
     return result.rows[0].id;
   }
@@ -40,7 +51,7 @@ class PlaylistSongsService {
     return result.rows;
   }
 
-  async deleteSongFromPlaylist(playlistId, songId) {
+  async deleteSongFromPlaylist(playlistId, songId, userId) {
     const query = {
       text: 'DELETE FROM playlist_songs WHERE playlist_id = $1 AND song_id = $2 RETURNING id',
       values: [playlistId, songId],
@@ -53,6 +64,14 @@ class PlaylistSongsService {
         'Gagal menghapus lagu dari playlist. Id lagu tidak ditemukan',
       );
     }
+
+    await this.playlistSongActivitiesService.addActivityToPlaylist(
+      playlistId,
+      songId,
+      userId,
+      'delete',
+      new Date().toISOString(),
+    );
   }
 
   async verifySongInPlaylist(playlistId, songId) {
