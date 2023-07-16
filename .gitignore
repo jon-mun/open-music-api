@@ -1,6 +1,6 @@
 *.pem
 .prod.env
-
+src/api/uploads/file/*
 # Logs
 logs
 *.log
