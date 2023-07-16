@@ -109,6 +109,19 @@ class PlaylistsService {
       }
     }
   }
+
+  async verifyPlaylistExist(id) {
+    const query = {
+      text: 'SELECT id FROM playlists WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this.pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Playlist tidak ditemukan');
+    }
+  }
 }
 
 module.exports = PlaylistsService;

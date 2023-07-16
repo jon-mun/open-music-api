@@ -16,7 +16,7 @@ const config = {
     accessTokenAge: process.env.ACCESS_TOKEN_AGE,
   },
   rabbitMq: {
-    server: process.env.RABBITMQ_SERVER,
+    host: process.env.RABBITMQ_SERVER,
   },
   redis: {
     host: process.env.REDIS_SERVER,
