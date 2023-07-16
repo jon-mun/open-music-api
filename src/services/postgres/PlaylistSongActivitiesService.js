@@ -5,7 +5,7 @@ class PlaylistSongActivitiesService {
   #pool;
 
   constructor() {
-    this.pool = new Pool();
+    this.#pool = new Pool();
   }
 
   async addActivityToPlaylist(playlistId, songId, userId, action, time) {
@@ -16,7 +16,7 @@ class PlaylistSongActivitiesService {
       values: [id, playlistId, songId, userId, action, time],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new Error('Activity gagal ditambahkan');
@@ -35,7 +35,7 @@ class PlaylistSongActivitiesService {
       values: [playlistId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     return result.rows;
   }

@@ -1,18 +1,20 @@
-/* eslint-disable no-underscore-dangle */
-
 class UsersHandler {
+  #service;
+
+  #validator;
+
   constructor(service, validator) {
-    this._service = service;
-    this._validator = validator;
+    this.#service = service;
+    this.#validator = validator;
 
     this.postUserHandler = this.postUserHandler.bind(this);
   }
 
   async postUserHandler(request, h) {
-    this._validator.validateUserPayload(request.payload);
+    this.#validator.validateUserPayload(request.payload);
     const { username, password, fullname } = request.payload;
 
-    const userId = await this._service.addUser({
+    const userId = await this.#service.addUser({
       username,
       password,
       fullname,

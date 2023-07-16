@@ -7,7 +7,7 @@ class AlbumsService {
   #pool;
 
   constructor() {
-    this.pool = new Pool();
+    this.#pool = new Pool();
   }
 
   async addAlbum({ name, year }) {
@@ -18,7 +18,7 @@ class AlbumsService {
       values: [id, name, year],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows[0].id) {
       throw new Error('Album gagal ditambahkan');
@@ -28,7 +28,7 @@ class AlbumsService {
   }
 
   async getAlbums() {
-    const result = await this.pool.query('SELECT * FROM albums');
+    const result = await this.#pool.query('SELECT * FROM albums');
 
     return result.rows.map(mapAlbumDBToModel);
   }
@@ -44,8 +44,8 @@ class AlbumsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
-    const songs = await this.pool.query(songsQuery);
+    const result = await this.#pool.query(query);
+    const songs = await this.#pool.query(songsQuery);
 
     if (!result.rows.length) {
       throw new NotFoundError('Album tidak ditemukan');
@@ -63,7 +63,7 @@ class AlbumsService {
       values: [name, year, id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan');
@@ -76,7 +76,7 @@ class AlbumsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Album gagal dihapus. Id tidak ditemukan');
@@ -89,7 +89,7 @@ class AlbumsService {
       values: [coverUrl, id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError(
@@ -104,7 +104,7 @@ class AlbumsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Album tidak ditemukan');

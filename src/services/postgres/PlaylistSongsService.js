@@ -8,8 +8,8 @@ class PlaylistSongsService {
   #playlistSongActivitiesService;
 
   constructor(playlistSongActivitiesService) {
-    this.pool = new Pool();
-    this.playlistSongActivitiesService = playlistSongActivitiesService;
+    this.#pool = new Pool();
+    this.#playlistSongActivitiesService = playlistSongActivitiesService;
   }
 
   async addSongToPlaylist(playlistId, songId, userId) {
@@ -20,13 +20,13 @@ class PlaylistSongsService {
       values: [id, playlistId, songId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows[0].id) {
       throw new Error('Lagu gagal ditambahkan ke playlist');
     }
 
-    await this.playlistSongActivitiesService.addActivityToPlaylist(
+    await this.#playlistSongActivitiesService.addActivityToPlaylist(
       playlistId,
       songId,
       userId,
@@ -46,7 +46,7 @@ class PlaylistSongsService {
       values: [playlistId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     return result.rows;
   }
@@ -57,7 +57,7 @@ class PlaylistSongsService {
       values: [playlistId, songId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError(
@@ -65,7 +65,7 @@ class PlaylistSongsService {
       );
     }
 
-    await this.playlistSongActivitiesService.addActivityToPlaylist(
+    await this.#playlistSongActivitiesService.addActivityToPlaylist(
       playlistId,
       songId,
       userId,
@@ -80,7 +80,7 @@ class PlaylistSongsService {
       values: [playlistId, songId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Lagu tidak ditemukan di playlist');

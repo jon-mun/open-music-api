@@ -4,8 +4,8 @@ class PlaylistSongActivitiesHandler {
   #playlistsService;
 
   constructor(playlistSongActivitiesService, playlistsService) {
-    this.playlistsService = playlistsService;
-    this.playlistSongActivitiesService = playlistSongActivitiesService;
+    this.#playlistsService = playlistsService;
+    this.#playlistSongActivitiesService = playlistSongActivitiesService;
 
     this.getPlaylistSongActivitiesHandler =
       this.getPlaylistSongActivitiesHandler.bind(this);
@@ -15,12 +15,12 @@ class PlaylistSongActivitiesHandler {
     const { id: playlistId } = request.params;
     const { id: credentialId } = request.auth.credentials;
 
-    const playlist = await this.playlistsService.getPlaylistById(playlistId);
+    const playlist = await this.#playlistsService.getPlaylistById(playlistId);
 
-    await this.playlistsService.verifyPlaylistAccess(playlistId, credentialId);
+    await this.#playlistsService.verifyPlaylistAccess(playlistId, credentialId);
 
     const activities =
-      await this.playlistSongActivitiesService.getActivitiesByPlaylistId(
+      await this.#playlistSongActivitiesService.getActivitiesByPlaylistId(
         playlistId,
       );
 

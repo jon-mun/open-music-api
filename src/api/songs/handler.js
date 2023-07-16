@@ -5,8 +5,8 @@ class SongsHandler {
   #validator;
 
   constructor(service, validator) {
-    this.service = service;
-    this.validator = validator;
+    this.#service = service;
+    this.#validator = validator;
 
     // bind
     this.postSongHandler = this.postSongHandler.bind(this);
@@ -17,10 +17,10 @@ class SongsHandler {
   }
 
   async postSongHandler(request, h) {
-    this.validator.validateSongPayload(request.payload);
+    this.#validator.validateSongPayload(request.payload);
     const { title, year, performer, genre, duration, albumId } =
       request.payload;
-    const songId = await this.service.addSong({
+    const songId = await this.#service.addSong({
       title,
       year,
       performer,
@@ -42,8 +42,8 @@ class SongsHandler {
   }
 
   async getSongsHandler(request, _h) {
-    this.validator.validateSongQuery(request.query);
-    const songs = await this.service.getSongs(request.query);
+    this.#validator.validateSongQuery(request.query);
+    const songs = await this.#service.getSongs(request.query);
     return {
       status: 'success',
       data: {
@@ -54,7 +54,7 @@ class SongsHandler {
 
   async getSongByIdHandler(request, _h) {
     const { id } = request.params;
-    const song = await this.service.getSongById(id);
+    const song = await this.#service.getSongById(id);
 
     return {
       status: 'success',
@@ -66,10 +66,10 @@ class SongsHandler {
 
   async putSongByIdHandler(request, _h) {
     const { id } = request.params;
-    this.validator.validateSongPayload(request.payload);
+    this.#validator.validateSongPayload(request.payload);
     const { title, year, performer, genre, duration, albumId } =
       request.payload;
-    await this.service.editSongById(id, {
+    await this.#service.editSongById(id, {
       title,
       year,
       performer,
@@ -86,7 +86,7 @@ class SongsHandler {
 
   async deleteSongByIdHandler(request, _h) {
     const { id } = request.params;
-    await this.service.deleteSongById(id);
+    await this.#service.deleteSongById(id);
     return {
       status: 'success',
       message: 'Lagu berhasil dihapus',

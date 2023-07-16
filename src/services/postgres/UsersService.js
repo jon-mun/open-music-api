@@ -9,8 +9,10 @@ const NotFoundError = require('../../exceptions/NotFoundError');
 const AuthenticationError = require('../../exceptions/AuthenticationError');
 
 class UsersService {
+  #pool;
+
   constructor() {
-    this._pool = new Pool();
+    this.#pool = new Pool();
   }
 
   async addUser({ username, password, fullname }) {
@@ -24,7 +26,7 @@ class UsersService {
       values: [id, username, hashedPassword, fullname],
     };
 
-    const result = await this._pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new InvariantError('User gagal ditambahkan');
@@ -39,7 +41,7 @@ class UsersService {
       values: [username],
     };
 
-    const result = await this._pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (result.rows.length > 0) {
       throw new InvariantError(
@@ -54,7 +56,7 @@ class UsersService {
       values: [userId],
     };
 
-    const result = await this._pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('User tidak ditemukan');
@@ -68,7 +70,7 @@ class UsersService {
       text: 'SELECT id, password FROM users WHERE username = $1',
       values: [username],
     };
-    const result = await this._pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new AuthenticationError('Kredensial yang Anda berikan salah');
@@ -90,7 +92,7 @@ class UsersService {
       text: 'SELECT id, username, fullname FROM users WHERE username LIKE $1',
       values: [`%${username}%`],
     };
-    const result = await this._pool.query(query);
+    const result = await this.#pool.query(query);
     return result.rows;
   }
 
@@ -99,7 +101,7 @@ class UsersService {
       text: 'SELECT id FROM users WHERE id = $1',
       values: [userId],
     };
-    const result = await this._pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('User tidak ditemukan');

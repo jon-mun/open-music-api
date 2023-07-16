@@ -6,7 +6,7 @@ class SongsService {
   #pool;
 
   constructor() {
-    this.pool = new Pool();
+    this.#pool = new Pool();
   }
 
   async addSong({ title, year, genre, performer, duration, albumId }) {
@@ -17,7 +17,7 @@ class SongsService {
       values: [id, title, year, genre, performer, duration, albumId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows[0].id) {
       throw new Error('Song gagal ditambahkan');
@@ -46,7 +46,7 @@ class SongsService {
       values: queryValues,
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     return result.rows;
   }
@@ -57,7 +57,7 @@ class SongsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Song tidak ditemukan');
@@ -72,7 +72,7 @@ class SongsService {
       values: [title, year, genre, performer, duration, albumId, id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Gagal memperbarui song. Id tidak ditemukan');
@@ -85,7 +85,7 @@ class SongsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Gagal menghapus song. Id tidak ditemukan');
@@ -98,7 +98,7 @@ class SongsService {
       values: [songId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Song tidak ditemukan');

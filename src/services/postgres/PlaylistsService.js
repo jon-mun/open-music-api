@@ -9,8 +9,8 @@ class PlaylistsService {
   #collaborationsService;
 
   constructor(collaborationsService) {
-    this.pool = new Pool();
-    this.collaborationsService = collaborationsService;
+    this.#pool = new Pool();
+    this.#collaborationsService = collaborationsService;
   }
 
   async addPlaylist({ name, owner }) {
@@ -21,7 +21,7 @@ class PlaylistsService {
       values: [id, name, owner],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows[0].id) {
       throw new Error('Playlist gagal ditambahkan');
@@ -40,7 +40,7 @@ class PlaylistsService {
       values: [owner],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     return result.rows;
   }
@@ -51,7 +51,7 @@ class PlaylistsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Playlist tidak ditemukan');
@@ -66,7 +66,7 @@ class PlaylistsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError(
@@ -81,7 +81,7 @@ class PlaylistsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Playlist tidak ditemukan');
@@ -103,7 +103,10 @@ class PlaylistsService {
       }
 
       try {
-        await this.collaborationsService.verifyCollaborator(playlistId, userId);
+        await this.#collaborationsService.verifyCollaborator(
+          playlistId,
+          userId,
+        );
       } catch {
         throw error;
       }
@@ -116,7 +119,7 @@ class PlaylistsService {
       values: [id],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this.#pool.query(query);
 
     if (!result.rows.length) {
       throw new NotFoundError('Playlist tidak ditemukan');
